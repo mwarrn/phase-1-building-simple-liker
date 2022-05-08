@@ -2,10 +2,29 @@
 const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
-// Your JavaScript code goes here!
+const likeGlyphs = document.querySelectorAll(".like-glyph");
 
+likeGlyphs.forEach((glyph) => glyph.addEventListener("click", onClick));
 
-
+function onClick(event) {
+  mimicServerCall()
+  .then(data => {
+    if (event.target.textContent === EMPTY_HEART) {
+      event.target.className = "activated-heart";
+      event.target.textContent = FULL_HEART;
+    }
+    else if (event.target.textContent === FULL_HEART) {
+      event.target.className = "like-glyph";
+      event.target.textContent = EMPTY_HEART;
+    }
+  })
+  .catch(function(error) {
+    const errorModal = document.querySelector("div#modal");
+    errorModal.className = "";
+    document.querySelector(['p#modal-message']).innerHTML = error;
+    setTimeout(function() { return errorModal.className = "hidden" }, 3000)    
+  })
+}
 
 //------------------------------------------------------------------------------
 // Don't change the code below: this function mocks the server response
